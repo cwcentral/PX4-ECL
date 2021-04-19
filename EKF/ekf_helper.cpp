@@ -1742,3 +1742,38 @@ float Ekf::kahanSummation(float sum_previous, float input, float &accumulator) c
 	accumulator = (t - sum_previous) - y;
 	return t;
 }
+
+//MODAL check 1.11+ master on PX4 branch
+void Ekf::setFusionStrategy(bool badGps)
+{
+	if (badGps)
+	{
+//		PX4_WARN("VIO ON");
+		_control_status.flags.ev_pos = true;
+		_control_status.flags.ev_vel = true;
+		_control_status.flags.ev_hgt = true;
+		_control_status.flags.gps_hgt = false;
+		_control_status.flags.baro_hgt = false;
+		_control_status.flags.gps = false;
+	}
+	else
+	{
+//		PX4_WARN("VIO OFF");
+		_control_status.flags.ev_pos = false;
+		_control_status.flags.ev_vel = false;
+		_control_status.flags.ev_hgt = false;
+		_control_status.flags.gps_hgt = true;
+		_control_status.flags.baro_hgt = true;
+		_control_status.flags.gps = true;
+	}
+
+	_control_status.flags.ev_yaw = false;
+	_control_status.flags.gps_yaw = false;
+
+	resetVelocity();
+	resetPosition();
+
+
+
+
+}

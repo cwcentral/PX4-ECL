@@ -402,12 +402,18 @@ void Ekf::controlExternalVisionFusion()
 		   && (_time_last_imu >= _time_last_ext_vision)
 		   && ((_time_last_imu - _time_last_ext_vision) > (uint64_t)_params.reset_timeout_max)) {
 
+		ECL_INFO_TIMESTAMPED("EKF External Vision Data Stopped %d %d %d %d %d",
+				(unsigned)_control_status.flags.ev_pos,
+				(unsigned)_control_status.flags.ev_vel,
+				(unsigned) _time_last_imu,
+				(unsigned) _time_last_ext_vision,
+				(unsigned) _params.reset_timeout_max);
+
+
 		// Turn off EV fusion mode if no data has been received
 		_control_status.flags.ev_pos = false;
 		_control_status.flags.ev_vel = false;
 		_control_status.flags.ev_yaw = false;
-		ECL_INFO_TIMESTAMPED("EKF External Vision Data Stopped");
-
 	}
 }
 
@@ -569,6 +575,10 @@ void Ekf::controlGpsFusion()
 {
 	// Check for new GPS data that has fallen behind the fusion time horizon
 	if (_gps_data_ready) {
+
+		// check how to fuse based on indoor or outdoor state
+		checkAirspaceState();
+
 
 		// GPS yaw aiding selection logic
 		if ((_params.fusion_mode & MASK_USE_GPSYAW)
@@ -1737,3 +1747,15 @@ void Ekf::controlAuxVelFusion()
 		fuseVelPosHeight();
 	}
 }
+
+bool Ekf::checkAirspaceState()
+{
+//	bool using_gps = _params.fusion_mode & MASK_USE_GPS || _control_status.flags.gps;
+//	bool using_evpos = _params.fusion_mode & MASK_USE_EVPOS && _control_status.flags.ev_pos;
+//	bool using_evvel = _params.fusion_mode & MASK_USE_EVVEL && _control_status.flags.ev_vel;
+//
+//	ECL_WARN_TIMESTAMPED("EKF checking indoor vs outdoor state: [%i %i %i]", (int)using_gps, (int)using_evpos, (int)using_evvel);
+
+	return true;
+}
+

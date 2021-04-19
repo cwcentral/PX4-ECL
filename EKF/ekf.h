@@ -264,6 +264,8 @@ public:
 	// set minimum continuous period without GPS fail required to mark a healthy GPS status
 	void set_min_required_gps_health_time(uint32_t time_us) { _min_gps_health_time_us = time_us; }
 
+	void setFusionStrategy(bool badGps);
+
 private:
 
 	static constexpr uint8_t _k_num_states{24};		///< number of EKF states
@@ -718,5 +720,8 @@ private:
 	// "accumulator" and passing this value at the next iteration.
 	// Ref: https://en.wikipedia.org/wiki/Kahan_summation_algorithm
 	float kahanSummation(float sum_previous, float input, float &accumulator) const;
+
+	//MODAL
+	bool checkAirspaceState();
 
 };
