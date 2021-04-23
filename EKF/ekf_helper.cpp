@@ -1743,7 +1743,7 @@ float Ekf::kahanSummation(float sum_previous, float input, float &accumulator) c
 	return t;
 }
 
-//MODAL check 1.11+ master on PX4 branch
+// set the localization fusion strategy
 void Ekf::setFusionStrategy(bool badGps)
 {
 	if (badGps)
@@ -1770,10 +1770,7 @@ void Ekf::setFusionStrategy(bool badGps)
 	_control_status.flags.ev_yaw = false;
 	_control_status.flags.gps_yaw = false;
 
+	// In v1.11 the rests are broken out PER modality vs a if-else block int hese methods.
 	resetVelocity();
 	resetPosition();
-
-
-
-
 }
